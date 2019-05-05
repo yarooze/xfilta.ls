@@ -5,7 +5,7 @@ Local script helper to filter huge select elements
 
 
 1. Install `Tampermonkey`, `Greasemonkey` or whatever.
-2. Install Filta https://github.com/yarooze/xfilta.ls/raw/master/filta.user.js
+2. Install Filta https://github.com/yarooze/xfilta.ls/raw/master/xfilta.user.js
 
 
 
