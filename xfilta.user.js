@@ -54,6 +54,7 @@
                         }
                     }
                 }
+
             }, 100);
         },
         resetFilteredContent: function (select) {
