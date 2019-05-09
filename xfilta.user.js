@@ -24,7 +24,8 @@
 
                 el.oncontextmenu = function(e) {
                     var element = e.target;
-                    if (element.tagName.toLocaleLowerCase() !== "select") {
+                    //alert(element.tagName);
+                    if (["select"].indexOf(element.tagName.toLocaleLowerCase()) === -1) { //, "option"
                         return;
                     }
                     e.preventDefault();
@@ -37,6 +38,7 @@
                 };
 
                 var i, iframes = el.getElementsByTagName('iframe');
+                //console.log("iframes in ", el, iframes.length);
                 if (iframes && iframes.length) {
                     for(i=0; i<iframes.length; i++) {
                         var iframeDocument = iframes[i].contentDocument || iframes[i].contentWindow.document;
@@ -46,6 +48,7 @@
                     }
                 }
                 var frames = el.getElementsByTagName("frame");
+                //console.log("frames in ", el, frames.length);
                 for(i=0; i<frames.length; i++) {
                     if (frames && frames.length) {
                         var frameDocument = frames[i].contentDocument || frames[i].contentWindow.document;
@@ -88,7 +91,7 @@
         },
         start: function () {
             setInterval(function() {
-                console.log("XFILTA searching for frames");
+                console.log("XFILTA searching for frames in", document);
                 XFILTA.findFrames(document, XFILTA.findFrames);
             }, 10000);
             console.log("XFILTA start");
