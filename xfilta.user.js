@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Select Filta X
 // namespace    https://github.com/yarooze/xfilta.ls
-// @version     0.0.2
+// @version     0.0.3
 // @description Filters options in the select element
 // @author      Yarooze
 // icon         https://github.com/yarooze/xfilta.ls/raw/master/Icon.png
@@ -15,6 +15,21 @@
     'use strict';
 
     var XFILTA = {
+        getSelectName: function (select) {
+            var selectName,
+                prefix = "";
+            if (select.tagName === "OPTION") {
+                select = select.parentElement;
+            }
+            if (select.id) {
+                selectName = prefix + "ID " + select.id;
+            } else if (select.name) {
+                selectName = prefix + "Name " + select.name;
+            } else {
+                selectName = prefix + "Select";
+            }
+            return selectName;
+        },
         findFrames: function (el, cb) {
             setTimeout(function () {
                 if (!el) {
@@ -25,12 +40,15 @@
                 el.oncontextmenu = function(e) {
                     var element = e.target;
                     //alert(element.tagName);
-                    if (["select"].indexOf(element.tagName.toLocaleLowerCase()) === -1) { //, "option"
+                    if (["select", "option"].indexOf(element.tagName.toLocaleLowerCase()) === -1) {
                         return;
                     }
                     e.preventDefault();
-                    var filterString = window.prompt("xFilta", "");
-                    if (filterString) {
+                    var selectName = XFILTA.getSelectName(element);
+                    var filterString = window.prompt("Filter "+selectName+":", "");
+                    if (filterString === null) {
+                        return;
+                    } else if (filterString) {
                         XFILTA.filterSelectContent(filterString, element);
                     } else {
                         XFILTA.resetFilteredContent(element);
@@ -62,6 +80,9 @@
         },
         resetFilteredContent: function (select) {
             var option;
+            if (select.tagName === "OPTION") {
+                select = select.parentElement;
+            }
             for (var optionIdx = 0; optionIdx < select.length; optionIdx++) {
                 option = select[optionIdx];
                 option.style.display = ""; //"none"
@@ -70,6 +91,9 @@
         },
         filterSelectContent: function (f_word, select) {
             var option, optionValue;
+            if (select.tagName === "OPTION") {
+                select = select.parentElement;
+            }
             f_word = f_word.toLowerCase();
             if (!f_word) {
                 XFILTA.resetFilteredContent(select);
@@ -93,7 +117,7 @@
             setInterval(function() {
                 console.log("XFILTA searching for frames in", document);
                 XFILTA.findFrames(document, XFILTA.findFrames);
-            }, 10000);
+            }, 1000);
             console.log("XFILTA start");
         }
     };
